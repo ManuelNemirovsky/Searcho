@@ -12,8 +12,7 @@ app.get('/', (req, res) => res.send('Hello World!'))
 
 // gets the audio file from mobile
 app.post('/audio', (req, res) =>{
-  speech.recognize(req.body.data)
-  // console.log(req.body.data);
+  speech.recognize(Buffer.from(req.body.data, 'base64'));
   res.sendStatus(200);
 })
 

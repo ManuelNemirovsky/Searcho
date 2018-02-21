@@ -23,7 +23,7 @@ let recognize = function(audioBytes){
     content: audioBytes,
   };
   const config = {
-    encoding: 'LINEAR16',
+    encoding: 'AMR_WB',
     sampleRateHertz: 16000,
     languageCode: 'en-US',
   };
