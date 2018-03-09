@@ -4,6 +4,8 @@ var bodyParser = require('body-parser')
 var fs = require('fs');
 var speech = require('./speech');
 var vision = require('./vision');
+var language = require('./language');
+var utils = require('./utils');
 var text = ""
 // var multer  = require('multer')
 // var upload = multer({ dest: 'uploads/' })
@@ -20,7 +22,12 @@ app.get('/', (req, res) => res.send('Hello World!'))
 app.post('/audio', (req, res) =>{
   speech.recognize(Buffer.from(req.body.data, 'base64'))
   .then(function(text){
-    //console.log(text);
+    console.log(text);
+    language.analyze(text).then(function(parts){
+      // res.send(parts);
+       let singlized = utils.singlize(parts.map(part=>part.content));
+      console.log("singlized: " + singlized);
+    })
     res.sendStatus(200);
   })
 })
@@ -47,12 +54,12 @@ app.post('/detect', (req, res) =>{
       // call detection
       vision.detect('./uploads/filename.jpg')
       .then(function(labels){
-        console.log(labels);
+        console.log("plutalized: " + labels);
+        console.log("singlized: " + utils.singlize(labels));
         // res.sendStatus(200)
         res.send(labels);
       })
   });
 })
-
 
 app.listen(3000, () => console.log('Example app listening on port 3000!'))
