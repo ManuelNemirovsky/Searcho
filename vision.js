@@ -6,7 +6,6 @@ const vision = require('@google-cloud/vision');
 
 exports.detect = function(img_path){
   // Creates a client
-  console.log("worked until here");
   const client = new vision.ImageAnnotatorClient();
 
   return new Promise(function(resolve, reject){

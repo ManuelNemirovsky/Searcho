@@ -39,8 +39,6 @@ app.post('/detect', (req, res) =>{
   //   console.log("It's saved");
   // });
   //TODO: save image locally, send the path to image to the vision.detect function
-
-
   if (!req.files)
     return res.status(400).send('No files were uploaded.');
   // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
@@ -54,8 +52,10 @@ app.post('/detect', (req, res) =>{
       // call detection
       vision.detect('./uploads/filename.jpg')
       .then(function(labels){
-        console.log("plutalized: " + labels);
-        console.log("singlized: " + utils.singlize(labels));
+        console.log("The lables from the picture:\n");
+        console.log(labels);
+        console.log("The lables singlized from the picture:\n");
+        console.log(utils.singlize(labels));
         // res.sendStatus(200)
         res.send(labels);
       })
