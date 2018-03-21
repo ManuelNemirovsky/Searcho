@@ -6,7 +6,7 @@ var speech = require('./speech');
 var vision = require('./vision');
 var language = require('./language');
 var utils = require('./utils');
-var text = ""
+var partsOfText = ""
 // var multer  = require('multer')
 // var upload = multer({ dest: 'uploads/' })
 const fileUpload = require('express-fileupload');
@@ -23,9 +23,12 @@ app.post('/audio', (req, res) =>{
   speech.recognize(Buffer.from(req.body.data, 'base64'))
   .then(function(text){
     console.log(text);
+    audioText = text;
     language.analyze(text).then(function(parts){
       // res.send(parts);
        let singlized = utils.singlize(parts.map(part=>part.content));
+       partsOfText = ""
+       partsOfText = parts
       console.log("singlized: " + singlized);
     })
     res.sendStatus(200);
@@ -48,17 +51,22 @@ app.post('/detect', (req, res) =>{
   sampleFile.mv('./uploads/filename.jpg', function(err) {
     if (err)
       return res.status(500).send(err);
-
       // call detection
       vision.detect('./uploads/filename.jpg')
       .then(function(labels){
         console.log("The lables from the picture:\n");
         console.log(labels);
-        console.log("The lables singlized from the picture:\n");
-        console.log(utils.singlize(labels));
+        res.send(utils.compare(labels , utils.singlize(partsOfText.reduce(function(filtered_array,x){
+          if(x.tag=='NOUN'){
+            filtered_array.push(x.content)
+          }
+          return filtered_array
+        }, []))[0]));
         // res.sendStatus(200)
-        res.send(labels);
+        //res.send(labels);
       })
+
+
   });
 })
 

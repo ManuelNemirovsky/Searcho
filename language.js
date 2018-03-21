@@ -29,8 +29,9 @@ let analyze = function(text){
         content: part.text.content
       });
     });
-    
+
     resolve(analyzed);
+    console.log(analyzed);
   })
     .catch(err => {
       console.error('ERROR:', err);
@@ -38,5 +39,4 @@ let analyze = function(text){
     });
   })
 }
-
 exports.analyze = analyze;
