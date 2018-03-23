@@ -7,8 +7,6 @@ var vision = require('./vision');
 var language = require('./language');
 var utils = require('./utils');
 var partsOfText = ""
-// var multer  = require('multer')
-// var upload = multer({ dest: 'uploads/' })
 const fileUpload = require('express-fileupload');
 
 app.use(bodyParser.json({limit: '50mb'}));
@@ -35,13 +33,8 @@ app.post('/audio', (req, res) =>{
   })
 })
 
-// gets the audio file from mobile
+// gets the labels from picture
 app.post('/detect', (req, res) =>{
-  // fs.writeFile('newImage', req.body.image, function (err) {
-  //   if (err) throw err;
-  //   console.log("It's saved");
-  // });
-  //TODO: save image locally, send the path to image to the vision.detect function
   if (!req.files)
     return res.status(400).send('No files were uploaded.');
   // The name of the input field (i.e. "sampleFile") is used to retrieve the uploaded file
@@ -56,17 +49,15 @@ app.post('/detect', (req, res) =>{
       .then(function(labels){
         console.log("The lables from the picture:\n");
         console.log(labels);
-        res.send(utils.compare(labels , utils.singlize(partsOfText.reduce(function(filtered_array,x){
-          if(x.tag=='NOUN'){
-            filtered_array.push(x.content)
-          }
-          return filtered_array
-        }, []))[0]));
-        // res.sendStatus(200)
-        //res.send(labels);
+        res.send(utils.compare(labels , utils.singlize(
+          partsOfText.reduce(
+            function(filtered_array,x){
+                if(x.tag=='NOUN'){
+                  filtered_array.push(x.content)
+                }
+                return filtered_array
+            }, []))[0]));
       })
-
-
   });
 })
 
