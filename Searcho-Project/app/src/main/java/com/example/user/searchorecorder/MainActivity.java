@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.android.volley.Request;
@@ -34,11 +35,12 @@ import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity {
 
-    private Button play,record,stop;
+    private Button play,stop;
     private MediaRecorder myAudioRecorder;
     private String outputFile;
+    private ImageButton record;
 
-    final String url = "http://10.0.0.3:3000/audio";
+    final String url = "http://10.0.0.9:3000/audio";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +48,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         play = (Button)findViewById(R.id.play);
         stop = (Button)findViewById(R.id.stop);
-        record = (Button)findViewById(R.id.record);
+        record = (ImageButton)findViewById(R.id.record);
         stop.setEnabled(true);
         play.setEnabled(true);
 
