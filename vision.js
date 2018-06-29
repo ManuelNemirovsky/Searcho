@@ -3,7 +3,7 @@ const Promise = require('promise');
 // Imports the Google Cloud client library
 const vision = require('@google-cloud/vision');
 
-
+//detect function from the google cloud vision api
 exports.detect = function(img_path){
   // Creates a client
   const client = new vision.ImageAnnotatorClient();

@@ -13,6 +13,8 @@ var ras_ip = ""
 var start_audio = -1
 var start_ip = -1
 
+//make sure taht the project could get
+//json files for the package manager
 app.use(bodyParser.json({limit: '50mb'}));
 app.use(bodyParser.urlencoded({limit: '50mb', extended: true}));
 app.use(fileUpload());
@@ -43,10 +45,7 @@ app.post('/audio', (req, res) =>{
       console.log(text);
       audioText = text;
       language.analyze(text).then(function(parts){
-        // res.send(parts);
-         // let singlized = utils.singlize(parts.map(part=>part.content));
          partsOfText = parts
-        // console.log("singlized: " + singlized);
         res.sendStatus(200);
       })
     }).then(utils.detect(ras_ip))
@@ -74,7 +73,6 @@ app.post('/detect', (req, res) =>{
       var single = utils.singlize(
           partsOfText.reduce(
             function(filtered_array,x){
-              console.log("Entered to the func");
                 if(x.tag=='NOUN'){
                   filtered_array.push(x.content)
                 }
