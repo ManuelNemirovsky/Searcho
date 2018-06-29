@@ -40,7 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private String outputFile;
     private ImageButton record;
 
-    final String url = "http://10.0.0.9:3000/audio";
+    final String url = "http://192.168.0.60:3000/audio";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
         outputFile = Environment.getExternalStorageDirectory().getAbsolutePath() + "/recording.3gp";
 
+        //when record button is pressed, the process starts a new
+        //media recorder object and records the person's order's.
         record.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -79,6 +81,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //When stop buttons is pressed, the process sends
+        //the record to the server for speech to text process.
         stop.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -90,6 +94,11 @@ public class MainActivity extends AppCompatActivity {
                 play.setEnabled(true);
                 Toast.makeText(getApplicationContext(), "Audio Recorder Successfully", Toast.LENGTH_LONG).show();
 
+                //this is a thread for sending the message to the
+                //server. we open the file with his path and
+                //we read the bits of the file and sending them
+                //in json object request.
+                //that is more comfortable for the server to open the request.
                 new Thread(new Runnable() {
                     public void run() {
                         File file = new File(outputFile);
@@ -114,6 +123,8 @@ public class MainActivity extends AppCompatActivity {
 
                             System.out.println("Entered the file to params");
 
+                            //this is the json object request for sending
+                            //the answer to the server.
                             JsonObjectRequest jsObjRequest = new
                                     JsonObjectRequest(Request.Method.POST,
                                     url,
@@ -121,7 +132,7 @@ public class MainActivity extends AppCompatActivity {
                                     new Response.Listener<JSONObject>() {
                                         @Override
                                         public void onResponse(JSONObject response) {
-                                            //System.out.println("worked yayy");
+
                                         }
                                     }, new Response.ErrorListener() {
                                 @Override
@@ -141,45 +152,11 @@ public class MainActivity extends AppCompatActivity {
 
                     }
                 }).start();
-
-//                new Thread(new Runnable() {
-//                    public void run() {
-//                        File file = new File(outputFile);
-//                        int size = (int) file.length();
-//                        byte[] bytes = new byte[size];
-//                        try {
-//                            //read the bytes from the file to the bytes object
-//                            BufferedInputStream buf = new BufferedInputStream(new FileInputStream(file));
-//                            buf.read(bytes, 0, bytes.length);
-//
-//                            //Making connection between the node.js server
-//                            URL url = new URL("10.0.0.5:3000/audio");
-//                            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-//                            conn.setDoInput(true);
-//                            conn.setDoOutput(true);
-//
-//                            //Openning outPutSteam that will send the bytes to the server
-//                            OutputStream outputStream = conn.getOutputStream();
-//                            //BufferedWriter bufferedWriter = new BufferedWriter(new OutputStreamWriter(outputStream, "UTF-8"));
-//
-//                            //Write and flush to the server
-//                            outputStream.write(bytes);
-//                            outputStream.flush();
-//
-//                        } catch (FileNotFoundException e) {
-//                            // TODO Auto-generated catch block
-//                            e.printStackTrace();
-//                        } catch (IOException e) {
-//                            // TODO Auto-generated catch block
-//                            e.printStackTrace();
-//                        }
-//
-//                    }
-//                }).start();
             }
         });
 
-
+        //play buttons is for playing the audio file and checking
+        //your request
         play.setOnClickListener(new View.OnClickListener()
         {
             @Override
